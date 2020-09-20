@@ -27,7 +27,7 @@ class WelcomeHelper(commands.Cog):
     """Welcome helper cog"""
 
     def __init__(self, bot):
-        super(commands.Cog).__init__(self, bot)
+        super().__init__(self, bot)
 
     @commands.command()
     async def help(self, ctx):
