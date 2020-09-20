@@ -48,7 +48,7 @@ class HelpSession:
         self._expire_task = asyncio.create_task(self.expire_sleep())
         self._expire_task.add_done_callback(partial(self.expire_end, self))
 
-    def expire_end(self):
+    def expire_end(self, *):
         """Runs when session expires"""
         print("Session {} expired".format(self.id))
 
