@@ -54,7 +54,7 @@ class HelpSession:
     async def expire_sleep(self):
         await asyncio.sleep(self.expire_time)
 
-    async def send_menu(self, menu):
+    async def send_menu(self, menu=[]):
         """ Sends a menu """
         self.expire_start() # Reset session expiry
 
@@ -87,4 +87,4 @@ class WelcomeHelper(commands.Cog):
 
         session = HelpSession(dm_channel, expire_time=30) # 30 second expiry for testing
 
-        await dm_channel.send(embed=Embed(title="Test"))
+        await session.send_menu()
