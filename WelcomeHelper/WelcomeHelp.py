@@ -30,8 +30,8 @@ class WelcomeHelper(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def help(self, ctx):
-        """Get help"""
+    async def gethelp(self, ctx):
+        """Get advanced server help"""
 
         author = ctx.message.author
 
