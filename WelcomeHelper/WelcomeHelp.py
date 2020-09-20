@@ -23,10 +23,6 @@ import asyncio
 from discord import Embed
 from redbot.core import commands, checks, Config, utils
 
-DEFAULTS = dict(
-    expire_time = 60 *5 # 5 minutes
-)
-
 class HelpSession:
     """Handles help sessions and their expiry"""
 
@@ -35,7 +31,7 @@ class HelpSession:
     def __init__(self, channel, **kwargs):
         self.id = channel.id
         self._channel = channel
-        self.expire_time = kwargs.get("expire_time", DEFAULTS.expire_time)
+        self.expire_time = kwargs.get("expire_time", 60 * 5 # 5 minutes)
         self.current_menu = kwargs.get("current_menu", None)
 
     @property
