@@ -42,7 +42,7 @@ class HelpSession:
 
     def expire_start(self):
         """Starts/Restarts session expiry"""
-        if self.expire_task is not None and not self.is_expired:
+        if self._expire_task is not None and not self.is_expired:
             self._expire_task.cancel()
         self._expire_task = asyncio.create_task(self.expire_sleep())
         self._expire_task.add_done_callback(self.expire_end, context=self)
