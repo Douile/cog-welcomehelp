@@ -31,7 +31,7 @@ class HelpSession:
     def __init__(self, channel, **kwargs):
         self.id = channel.id
         self._channel = channel
-        self.expire_time = kwargs.get("expire_time", 60 * 5 # 5 minutes)
+        self.expire_time = kwargs.get("expire_time", 60 * 5) # 5 minutes
         self.current_menu = kwargs.get("current_menu", None)
 
     @property
