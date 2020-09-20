@@ -32,7 +32,7 @@ class HelpSession:
 
     _expire_task = None
 
-    def __init__(self, channel, *, **kwargs):
+    def __init__(self, channel, **kwargs):
         self.id = channel.id
         self._channel = channel
         self.expire_time = kwargs.get("expire_time", DEFAULTS.expire_time)
