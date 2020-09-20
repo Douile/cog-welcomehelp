@@ -23,8 +23,53 @@ import asyncio
 from discord import Embed
 from redbot.core import commands, checks, Config, utils
 
+DEFAULTS = dict(
+    expire_time = 60 *5 # 5 minutes
+)
+
+class HelpSession:
+    """Handles help sessions and their expiry"""
+
+    _expire_task = None
+
+    def __init__(self, channel, *, **kwargs):
+        self.id = channel.id
+        self._channel = channel
+        self.expire_time = kwargs.get("expire_time", DEFAULTS.expire_time)
+        self.current_menu = kwargs.get("current_menu", None)
+
+    @property
+    def is_expired(self):
+        if self._expire_task is None:
+            return False
+        return self._expire_task.done()
+
+    def expire_start(self):
+        """Starts/Restarts session expiry"""
+        if self.expire_task is not None and not self.is_expired:
+            self._expire_task.cancel()
+        self._expire_task = asyncio.create_task(self.expire_sleep())
+        self._expire_task.add_done_callback(self.expire_end, context=self)
+
+    def expire_end(self):
+        """Runs when session expires"""
+        print("Session {} expired".format(self.id))
+
+    async def expire_sleep(self):
+        await asyncio.sleep(self.expire_time)
+
+    async def send_menu(self, menu):
+        """ Sends a menu """
+        self.expire_start() # Reset session expiry
+
+        self.current_menu = menu
+        await self._channel.send(embed=Embed(title="Gethelp menu",description="ID `{}`".format(self.id)))
+
+
 class WelcomeHelper(commands.Cog):
     """Welcome helper cog"""
+
+    _activehelp = dict()
 
     def __init__(self, bot):
         self.bot = bot
@@ -43,5 +88,7 @@ class WelcomeHelper(commands.Cog):
             # Unable to create DM
             await ctx.send("Unable to find/create a DM please check your privacy settings")
             return
+
+        session = HelpSession(dm_channel, expire_time=30) # 30 second expiry for testing
 
         await dm_channel.send(embed=Embed(title="Test"))
